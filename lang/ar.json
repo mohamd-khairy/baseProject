@@ -1,0 +1,9 @@
+{
+    "adding": "اضافة",
+    "translations setting": "اعدادات اللغة",
+    "Translations": "اللغة",
+    "The :attribute must contain at least one uppercase and one lowercase letter.": "يجب أن تحتوي :attribute على حرف كبير واحد وحرف صغير واحد على الأقل.",
+    "The :attribute must contain at least one letter.": "يجب أن تحتوي :attribute على حرف واحد على الأقل.",
+    "The :attribute must contain at least one symbol.": "يجب أن تحتوي :attribute على رمز واحد على الأقل.",
+    "The :attribute must contain at least one number.": "يجب أن تحتوي :attribute على رقم واحد على الأقل."
+}
