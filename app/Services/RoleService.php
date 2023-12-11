@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
-class RolesService
+class RoleService
 {
     /**
      *  Define basic operations to be used for each model permissions.
@@ -25,7 +25,7 @@ class RolesService
      */
     public static function handle(): void
     {
-        self::createRole(); // create admin role and assign all permissions to this role
+        self::createRole(); //Create admin role and assign all permissions to this role
 
         $roles = collect(collect(require database_path('data/roles.php'))['roles']);
 
@@ -34,7 +34,7 @@ class RolesService
                 'name' => $role,
                 'guard_name' => 'web'
             ], [
-                'display_name' => handleTrans("roles.$role", lang: 'ar'),
+                'display_name' => handleTrans("roles.$role", lang: 'ar')
             ]);
 
             $permissions = self::handleCustomOperation($details['permissions']);
@@ -251,7 +251,6 @@ class RolesService
 
         return array_filter(array_unique($permissions ?? []));
     }
-
 
     public static function handleModelPermissions(array $models): array
     {

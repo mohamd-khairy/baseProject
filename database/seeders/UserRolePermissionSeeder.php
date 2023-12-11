@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use App\Services\RolesService;
+use App\Services\RoleService;
 use Illuminate\Database\Seeder;
 
 class UserRolePermissionSeeder extends Seeder
@@ -15,7 +15,7 @@ class UserRolePermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        RolesService::handle();
+        RoleService::handle();
 
         $roles = array_keys(config('roles.list'));
         $roles[] = 'admin';

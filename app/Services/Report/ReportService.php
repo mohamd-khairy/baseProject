@@ -3,10 +3,6 @@
 
 namespace App\Services\Report;
 
-use App\Exceptions\GeneralException;
-use App\Services\ChartService;
-use Exception;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
 
