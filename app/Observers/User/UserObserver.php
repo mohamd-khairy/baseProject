@@ -2,20 +2,23 @@
 
 namespace App\Observers\User;
 
-use App\Models\Cause;
+use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 
 class UserObserver
 {
     /**
-     * @param Cause $cause
+     * @param User $user
      * @return void
      */
-    public function created(Cause $cause): void
+    public function created(User $user): void
     {
-        $cause->calenders()->updateOrCreate([
-            'start_date' => $cause->date,
-            'end_date' => $cause->date,
-            'details' => "تم اضافة قضية برقم ({$cause->cause_number})"
-        ]);
+        try {
+
+            event(new Registered($user));
+
+        } catch (\Throwable $th) {
+            //
+        }
     }
 }

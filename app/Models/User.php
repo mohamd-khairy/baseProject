@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Global\StatusEnum;
+use App\Notifications\Auth\PasswordReset;
 use App\Services\UploadService;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
@@ -10,7 +11,6 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -20,14 +20,15 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public bool $inPermission = true;
 
-    protected $fillable = ['name', 'email', 'phone', 'password', 'avatar', 'last_login'];
+    protected $fillable = ['name', 'email', 'phone', 'password', 'avatar', 'otp', 'last_login'];
 
-    protected $hidden = ['password', 'remember_token',];
+    protected $hidden = ['password', 'remember_token', 'otp'];
 
     protected $casts = [
         'email_verified_at' => 'datetime',
         'last_login' => 'datetime',
         'status' => StatusEnum::class,
+        'password' => 'hashed',
     ];
 
     /*
@@ -40,13 +41,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return Attribute::make(
             get: fn($value) => $value ? UploadService::url($value) : null,
             set: fn($value) => !empty($value) ? UploadService::store($value, 'users') : $this->avatar
-        );
-    }
-
-    public function password(): Attribute
-    {
-        return Attribute::make(
-            set: fn($value) => !empty($value) ? Hash::make($value) : $this->password
         );
     }
 
@@ -75,7 +69,15 @@ class User extends Authenticatable implements MustVerifyEmail
      |--------------------------------------------------------------------------
     */
 
-         /**** write here helper methods ****/
+    public function hasVerifiedEmail(): bool
+    {
+        return !is_null($this->email_verified_at);
+    }
+
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new PasswordReset($token));
+    }
 
     /*
      |--------------------------------------------------------------------------
@@ -83,6 +85,7 @@ class User extends Authenticatable implements MustVerifyEmail
      |--------------------------------------------------------------------------
     */
 
-        /**** write here relations methods ****/
+    /**** write here relations methods ****/
+
 
 }
