@@ -38,10 +38,16 @@ class VerificationController extends Controller
             return responseFail('no user with this id');
         }
 
-        if ($user->update(['email_verified_at' => now()])) {
-            return responseSuccess(msg: 'Verify email successfully');
+        if (!$user->email_verified_at) {
+
+            if ($user->update(['email_verified_at' => now()])) {
+                return request()->wantsJson() ? responseSuccess(msg: 'Verify email successfully') : redirect(url('/'))->with('message', 'Verify email successfully');
+            }
+
+            return responseFail('email not verified');
         }
 
-        return responseFail('email not verified');
+        return request()->wantsJson() ? responseSuccess(msg: 'email verified') : redirect(url('/'))->with('message', 'email verified');
+
     }
 }

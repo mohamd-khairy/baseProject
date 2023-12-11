@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\OtpController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\UserController;
@@ -25,6 +26,8 @@ Route::prefix('v1')->group(function () {
     Route::group([], function () {
 
         Auth::routes(['verify' => true]);
+
+        Route::post('verify-otp', [LoginController::class, 'verifyOTP']);
     });
 
     /***************************************** auth routes*********************************************************** */
