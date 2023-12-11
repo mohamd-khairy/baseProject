@@ -30,11 +30,11 @@ class Handler extends ExceptionHandler
         });
 
         $this->renderable(function (AuthenticationException $e, $request) {
-            return responseFail($e->getMessage(), 401);
+            return failResponse($e->getMessage(), 401);
         });
 
         $this->renderable(function (HttpException $e, $request) {
-            return responseFail($e->getMessage(), 400);
+            return failResponse($e->getMessage(), 400);
         });
     }
 }

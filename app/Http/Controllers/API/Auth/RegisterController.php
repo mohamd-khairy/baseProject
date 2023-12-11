@@ -20,9 +20,9 @@ class RegisterController extends Controller
 
         if ($user) {
 
-            return responseSuccess(new UserResource($user), 'User Created Successfully');
+            return successResponse(new UserResource($user), 'User Created Successfully');
         }
 
-        return responseFail('User Not created');
+        return failResponse('User Not created');
     }
 }

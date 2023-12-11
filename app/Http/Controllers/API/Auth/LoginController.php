@@ -46,16 +46,16 @@ class LoginController extends Controller
             $user = Auth::user();
 
             if (!$user?->hasVerifiedEmail()) {
-                return responseFail('Your email address is not verified.');
+                return failResponse('Your email address is not verified.');
             }
 
-            return responseSuccess([
+            return successResponse([
                 'token' => $user?->createToken("API TOKEN")->plainTextToken,
                 'user' => new UserResource($user),
             ], 'User Logged In Successfully');
         }
 
-        return responseFail('Unauthorized', 401);
+        return failResponse('Unauthorized', 401);
     }
 
     /**
@@ -89,10 +89,10 @@ class LoginController extends Controller
             } catch (\Throwable $th) {
             }
 
-            return responseSuccess('OTP sent successfully');
+            return successResponse('OTP sent successfully');
         }
 
-        return responseFail('No User With this Data');
+        return failResponse('No User With this Data');
     }
 
     /**
@@ -120,14 +120,14 @@ class LoginController extends Controller
 
                 $user->update(['otp' => null]);
 
-                return responseSuccess([
+                return successResponse([
                     'token' => $user->createToken("API TOKEN")->plainTextToken,
                     'user' => new UserResource($user),
                 ], 'User Logged In Successfully');
             }
         }
 
-        return responseFail('Invalid OTP');
+        return failResponse('Invalid OTP');
     }
 
     /**
@@ -138,6 +138,6 @@ class LoginController extends Controller
     {
         $request->user()->tokens()->delete();
 
-        return responseSuccess(msg: 'Logged out successfully');
+        return successResponse(message:'Logged out successfully');
     }
 }

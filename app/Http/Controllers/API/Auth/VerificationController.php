@@ -30,10 +30,10 @@ class VerificationController extends Controller
                 //throw $th;
             }
 
-            return responseSuccess(msg: 'Verify email send successfully');
+            return successResponse(message:'Verify email send successfully');
         }
 
-        return responseFail('email verified');
+        return failResponse('email verified');
     }
 
     /**
@@ -47,15 +47,15 @@ class VerificationController extends Controller
 
             if ($user->update(['email_verified_at' => now()])) {
                 return request()->wantsJson()
-                    ? responseSuccess(msg: 'Verify email successfully')
+                    ? successResponse(message:'Verify email successfully')
                     : redirect(url('/'))->with('message', 'Verify email successfully');
             }
 
-            return responseFail('email not verified');
+            return failResponse('email not verified');
         }
 
         return request()->wantsJson()
-            ? responseSuccess(msg: 'email verified')
+            ? successResponse(message:'email verified')
             : redirect(url('/'))->with('message', 'email verified');
 
     }
