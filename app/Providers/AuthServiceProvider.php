@@ -24,11 +24,6 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        ResetPassword::createUrlUsing(function (User $user, string $token) {
-            return url('api/v1' . route('password.reset', [
-                'token' => $token,
-                'email' => $user->email,
-            ], false));
-        });
+        //
     }
 }
