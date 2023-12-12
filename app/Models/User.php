@@ -12,11 +12,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use OwenIt\Auditing\Contracts\Auditable;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements MustVerifyEmail, Auditable
 {
     use HasApiTokens, Notifiable, HasRoles, SoftDeletes;
+
+    use \OwenIt\Auditing\Auditable;
+
+    protected $auditInclude = [];
 
     public bool $inPermission = true;
 
@@ -39,8 +44,8 @@ class User extends Authenticatable implements MustVerifyEmail
     public function avatar(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => $value ? UploadService::url($value) : null,
-            set: fn($value) => !empty($value) ? UploadService::store($value, 'users') : $this->avatar
+            get: fn ($value) => $value ? UploadService::url($value) : null,
+            set: fn ($value) => !empty($value) ? UploadService::store($value, 'users') : $this->avatar
         );
     }
 
@@ -86,6 +91,4 @@ class User extends Authenticatable implements MustVerifyEmail
     */
 
     /**** write here relations methods ****/
-
-
 }
