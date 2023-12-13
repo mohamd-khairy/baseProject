@@ -68,7 +68,11 @@ return [
     'additional_operations' => [
         [
             'name' => 'Log',
-            'operations' => ['read']
+            'operations' => ['read', 'delete']
+        ],
+        [
+            'name' => 'Trash',
+            'operations' => ['read', 'restore', 'delete']
         ]
     ]
 ];

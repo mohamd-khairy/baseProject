@@ -12,6 +12,12 @@ use OwenIt\Auditing\Models\Audit;
 
 class ActivityController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:read-log', ['only' => ['index', 'show']]);
+        $this->middleware('permission:delete-log', ['only' => ['destroy']]);
+    }
+
     /**
      * @param PageRequest $request
      * @return JsonResponse

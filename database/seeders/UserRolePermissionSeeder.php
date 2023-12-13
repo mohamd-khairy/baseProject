@@ -24,7 +24,7 @@ class UserRolePermissionSeeder extends Seeder
             $user = User::create([
                 'name' => handleTrans("roles.$role", lang: 'ar'),
                 'email' => $role . '@wakeb.com',
-                'password' => 123456,
+                'password' => 12345678,
                 'email_verified_at' => now(),
             ]);
 

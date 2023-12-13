@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\Auth\LoginController;
 use App\Http\Controllers\API\Global\ActivityController;
+use App\Http\Controllers\API\Global\TrashController;
 use App\Http\Controllers\API\User\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -29,6 +30,15 @@ Route::prefix('v1')->group(function () {
         |--------------------------------------------------------------------------
        */
         Route::get('user', [UserController::class, 'user']);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Trash Routes
+        |--------------------------------------------------------------------------
+       */
+        Route::get('trash/{type}', [TrashController::class, 'index']);
+        Route::get('trash/{trash}/{type}', [TrashController::class, 'show']);
+        Route::delete('trash/{trash}/{type}', [TrashController::class, 'destroy']);
 
         /*
         |--------------------------------------------------------------------------
