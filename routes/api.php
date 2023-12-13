@@ -38,6 +38,7 @@ Route::prefix('v1')->group(function () {
        */
         Route::get('trash/{type}', [TrashController::class, 'index']);
         Route::get('trash/{trash}/{type}', [TrashController::class, 'show']);
+        Route::get('trash/restore/{trash}/{type}', [TrashController::class, 'restore']);
         Route::delete('trash/{trash}/{type}', [TrashController::class, 'destroy']);
 
         /*

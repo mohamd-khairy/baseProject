@@ -45,11 +45,27 @@ class TrashController extends Controller
      * @param string $type
      * @return JsonResponse
      */
+    public function show(int $id, string $type): JsonResponse
+    {
+        $model = app(detectModelPath($type));
+
+        $data = $model->onlyTrashed()->findOrFail($id);
+
+        return successResponse($data);
+    }
+
+    /**
+     * @param int $id
+     * @param string $type
+     * @return JsonResponse
+     */
     public function restore(int $id, string $type): JsonResponse
     {
         $model = app(detectModelPath($type));
 
         $data = $model->onlyTrashed()->findOrFail($id);
+
+        $data->restore();
 
         return successResponse($data);
     }
@@ -65,8 +81,7 @@ class TrashController extends Controller
 
         $data = $model->onlyTrashed()->findOrFail($id);
 
-        if ($data)
-            $data->forceDelete();
+        $data->forceDelete();
 
         return successResponse($data);
     }
