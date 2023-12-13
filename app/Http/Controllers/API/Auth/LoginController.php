@@ -27,7 +27,7 @@ class LoginController extends Controller
      */
     public function login(LoginRequest $request): JsonResponse
     {
-        if (env('USE_OTP', false)) {
+        if (config('app.use_otp', false)) {
             return $this->loginWithOtp($request);
         }
 
@@ -107,7 +107,7 @@ class LoginController extends Controller
         // Retrieve the stored OTP from the cache
         $storedOTP = Cache::get('otp:' . $userIdentifier);
 
-        if ($storedOTP && $enteredOTP === $storedOTP) {
+        if ($storedOTP && $enteredOTP == $storedOTP) {
 
             $user = User::where('otp', $enteredOTP)->first();
 

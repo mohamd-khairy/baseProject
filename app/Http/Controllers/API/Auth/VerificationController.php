@@ -24,14 +24,13 @@ class VerificationController extends Controller
         if (!$user->hasVerifiedEmail()) {
 
             try {
+                /** event for send verify email to user */
                 event(new Registered($user));
-
-                return successResponse(message: 'Verify email send successfully');
             } catch (Throwable $th) {
-                logError($th);
-
-                return failResponse(message: 'Error In sending email, try again');
+                //throw $th;
             }
+
+            return successResponse(message: 'Verify email send successfully');
         }
 
         return failResponse('email verified');
@@ -39,14 +38,18 @@ class VerificationController extends Controller
 
     /**
      * @param User $user
+     * @param $hash
      * @return JsonResponse|RedirectResponse|Redirector
      */
-    public function verify(User $user): JsonResponse|RedirectResponse|Redirector
+    public function verify(User $id, $hash): JsonResponse|RedirectResponse|Redirector
     {
+        $user = $id;
+
         if (!$user->email_verified_at) {
 
-            if ($user->update(['email_verified_at' => now()])) {
-                return request()?->wantsJson()
+            $user->email_verified_at = now();
+            if ($user->save()) {
+                return request()->wantsJson()
                     ? successResponse(message: 'Verify email successfully')
                     : redirect(url('/'))->with('message', 'Verify email successfully');
             }
@@ -54,9 +57,8 @@ class VerificationController extends Controller
             return failResponse('email not verified');
         }
 
-        return request()?->wantsJson()
+        return request()->wantsJson()
             ? successResponse(message: 'email verified')
             : redirect(url('/'))->with('message', 'email verified');
-
     }
 }

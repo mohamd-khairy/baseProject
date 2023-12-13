@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\Auth\LoginController;
+use App\Http\Controllers\API\Global\ActivityController;
 use App\Http\Controllers\API\User\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -22,7 +23,6 @@ Route::prefix('v1')->group(function () {
     Route::group([], function () {
 
         Auth::routes(['verify' => true]);
-
         Route::post('verify-otp', [LoginController::class, 'verifyOTP']);
     });
 
@@ -31,5 +31,10 @@ Route::prefix('v1')->group(function () {
 
         /********************UserController******************************* */
         Route::get('user', [UserController::class, 'user']);
+
+        /********************ActivityController******************************* */
+        Route::get('activity', [ActivityController::class, 'index']);
+        Route::get('activity/{audit}', [ActivityController::class, 'show']);
+        Route::delete('activity/{id?}', [ActivityController::class, 'destroy']);
     });
 });

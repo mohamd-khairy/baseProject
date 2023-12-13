@@ -11,6 +11,7 @@ use App\Http\Resources\User\UserResource;
 use App\Models\User;
 use App\Services\UploadService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\DB;
 
@@ -96,7 +97,7 @@ class UserController extends Controller
      * @param int $id
      * @return JsonResponse
      */
-    public function destroy(int $id): JsonResponse
+    public function destroy(int $id = null): JsonResponse
     {
         $ids = empty(request('ids')) ? [$id] : explode(',', request('ids'));
 
@@ -108,5 +109,14 @@ class UserController extends Controller
 
             return successResponse('User(s) have been successfully deleted');
         });
+    }
+
+    /**
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function user(Request $request)
+    {
+        return \successResponse($request->user());
     }
 }
