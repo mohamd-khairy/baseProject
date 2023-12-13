@@ -53,20 +53,10 @@ class Handler extends ExceptionHandler
 
     protected function reportAdmin(Throwable $e)
     {
-        if (!config('app.mail_admin_exception', false)) {
-            return;
-        }
-
-        // Create Notification Data
-        $exception = [
-            "name" => get_class($e),
-            "message" => $e->getMessage(),
-            "file" => $e->getFile(),
-            "line" => $e->getLine(),
-            "time" => now(),
-        ];
 
         try {
+            // Create Notification Data
+            $exception = handleException($e);
 
             event(new ErrorAlertEvent($exception));
         } catch (\Throwable $th) {
