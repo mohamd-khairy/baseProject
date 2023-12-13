@@ -27,7 +27,7 @@ class RoleService
     {
         self::createRole(); //Create admin role and assign all permissions to this role
 
-        $roles = collect(collect(require database_path('data/roles.php'))['roles']);
+        $roles = collect(config('roles.list'));
 
         $roles->map(function ($details, $role) {
             $role = Role::updateOrCreate([
@@ -37,7 +37,7 @@ class RoleService
                 'display_name' => handleTrans("roles.$role", lang: 'ar')
             ]);
 
-            $permissions = self::handleCustomOperation($details['permissions']);
+            $permissions = self::handleCustomOperation($details['permissions']??[]);
 
             if (isset($details['like']) && $details['like']) {
                 $likeRole = Role::where('name', $details['like'])->with('permissions')->first();
@@ -80,7 +80,7 @@ class RoleService
      */
     public static function getModels(...$exceptions): Collection
     {
-        $additional_models = array_column(collect(require database_path('data/roles.php'))['additional_operations'], 'name');
+        $additional_models = array_column(config('roles.additional_operations'), 'name');
 
         return collect(scandir(app_path('Models')))->filter(function ($file_or_directory) {
 
@@ -193,7 +193,7 @@ class RoleService
      */
     private static function prepareOperations(string $model_name): array
     {
-        $additional_operations = collect(require database_path('data/roles.php'))['additional_operations'];
+        $additional_operations = array_column(config('roles.additional_operations'), 'name');
         $operations = self::BASIC_OPERATIONS;
         $object = false;
 

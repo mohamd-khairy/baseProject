@@ -1,25 +1,21 @@
 <?php
 
-use App\Events\ErrorAlertEvent;
 use Illuminate\Support\Str;
 
 if (!function_exists('handleException')) {
-    function handleException(Throwable $e)
+    function handleException(Throwable $e): ?array
     {
         if (!config('app.mail_admin_exception', false)) {
             return null;
         }
 
-        // Create Notification Data
-        $exception = [
+        return [
             "name" => get_class($e),
             "message" => $e->getMessage(),
             "file" => $e->getFile(),
             "line" => $e->getLine(),
             "time" => now(),
         ];
-
-        return $exception;
     }
 }
 
@@ -96,7 +92,7 @@ if (!function_exists('timeFormat')) {
 if (!function_exists('logError')) {
     function logError($exception): void
     {
-        info("Error In Line => " . $exception->getLine() . " ErrorDetails => " . $exception->getMessage());
+        info("Error In Line => " . $exception->getLigne() . " in File => {$exception->getFile()} , ErrorDetails => " . $exception->getMessage());
     }
 }
 

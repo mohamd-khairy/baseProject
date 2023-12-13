@@ -4,12 +4,11 @@ namespace App\Http\Controllers\API\Global;
 
 use App\Filters\SortFilters;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\DataEntry\PageRequest;
+use App\Http\Resources\Global\PageRequest;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use OwenIt\Auditing\Models\Audit;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\DB;
+use OwenIt\Auditing\Models\Audit;
 
 class ActivityController extends Controller
 {
@@ -25,9 +24,9 @@ class ActivityController extends Controller
             SortFilters::class
         ])->thenReturn();
 
-        $data = request('pageSize') == -1
+        $data = request('page') == -1
             ? $data->get()
-            : $data->paginate(request('pageSize', 15));
+            : $data->paginate(request('page', 15));
 
         return successResponse(['activity' => $data]);
     }
@@ -44,7 +43,7 @@ class ActivityController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param int|null $id
      * @return JsonResponse
      */
     public function destroy(int $id = null): JsonResponse

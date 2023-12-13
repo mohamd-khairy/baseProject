@@ -19,7 +19,6 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth']);
         $this->middleware('permission:read-user|read-beneficiary', ['only' => ['index', 'show']]);
         $this->middleware('permission:create-user|create-beneficiary', ['only' => ['store']]);
         $this->middleware('permission:update-user|update-beneficiary', ['only' => ['update']]);
@@ -94,7 +93,7 @@ class UserController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param int|null $id
      * @return JsonResponse
      */
     public function destroy(int $id = null): JsonResponse
@@ -112,10 +111,10 @@ class UserController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param Request $request
      * @return JsonResponse
      */
-    public function user(Request $request)
+    public function user(Request $request): JsonResponse
     {
         return \successResponse($request->user());
     }

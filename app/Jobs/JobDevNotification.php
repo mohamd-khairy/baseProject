@@ -2,12 +2,10 @@
 
 namespace App\Jobs;
 
-use App\Events\ErrorAlertEvent;
 use App\Mail\Errors\ErrorAlertMail;
 use App\Models\User;
 use Exception;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -35,22 +33,25 @@ class JobDevNotification implements ShouldQueue
             $i->where('name', 'admin');
         })->value('email');
 
-        $email = $email ? $email : config('app.admin_email', null);
+        $email = $email ?: config('app.admin_email', null);
 
         if ($email) {
             Mail::to($email)->send(new ErrorAlertMail($this->exception));
         }
     }
 
-    public function failed(Exception $e)
+    /**
+     * @param Exception $e
+     * @return void
+     */
+    public function failed(Exception $e): void
     {
-        try {
-            // Create Notification Data
-            $exception = handleException($e);
-
-            event(new ErrorAlertEvent($exception));
-        } catch (\Throwable $th) {
-            //
-        }
+//        try {
+//            $exception = handleException($e);
+//
+//            event(new ErrorAlertEvent($exception));
+//        } catch (\Throwable $th) {
+//            //
+//        }
     }
 }

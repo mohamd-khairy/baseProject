@@ -6,7 +6,7 @@ use App\Events\OTPLogin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\OtpRequest;
-use App\Http\Resources\Auth\UserResource;
+use App\Http\Resources\User\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

@@ -4,13 +4,41 @@ namespace {{ namespace }};
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Contracts\Auditable as IAuditable;
+use OwenIt\Auditing\Auditable;
 
 class {{ class }} extends Model implements Auditable
 {
-    use HasFactory;
+    use HasFactory,Auditable;
 
-    use \OwenIt\Auditing\Auditable;
+    protected array $auditInclude = [];
 
-    protected $auditInclude = [];
+    protected $fillable = [];
+
+    /*
+     |--------------------------------------------------------------------------
+     | Custom Attributes
+     |--------------------------------------------------------------------------
+    */
+
+
+    /*
+     |--------------------------------------------------------------------------
+     | Scope methods
+     |--------------------------------------------------------------------------
+    */
+
+
+    /*
+     |--------------------------------------------------------------------------
+     | Helper methods
+     |--------------------------------------------------------------------------
+    */
+
+
+    /*
+     |--------------------------------------------------------------------------
+     | Relations methods
+     |--------------------------------------------------------------------------
+    */
 }

@@ -12,16 +12,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable;
+use OwenIt\Auditing\Contracts\Auditable as IAuditable;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements MustVerifyEmail, Auditable
+class User extends Authenticatable implements MustVerifyEmail, IAuditable
 {
-    use HasApiTokens, Notifiable, HasRoles, SoftDeletes;
+    use HasApiTokens, Notifiable, HasRoles, SoftDeletes, Auditable;
 
-    use \OwenIt\Auditing\Auditable;
-
-    protected $auditInclude = [];
+    protected array $auditInclude = [];
 
     public bool $inPermission = true;
 
@@ -44,8 +43,8 @@ class User extends Authenticatable implements MustVerifyEmail, Auditable
     public function avatar(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value ? UploadService::url($value) : null,
-            set: fn ($value) => !empty($value) ? UploadService::store($value, 'users') : $this->avatar
+            get: fn($value) => $value ? UploadService::url($value) : null,
+            set: fn($value) => !empty($value) ? UploadService::store($value, 'users') : $this->avatar
         );
     }
 
@@ -73,17 +72,11 @@ class User extends Authenticatable implements MustVerifyEmail, Auditable
         });
     }
 
-    public function isAdmin()
-    {
-        return $this->hasRole('admin');
-    }
-
     /*
      |--------------------------------------------------------------------------
      | Helper methods
      |--------------------------------------------------------------------------
     */
-
     public function hasVerifiedEmail(): bool
     {
         return !is_null($this->email_verified_at);
@@ -94,11 +87,14 @@ class User extends Authenticatable implements MustVerifyEmail, Auditable
         $this->notify(new PasswordReset($token));
     }
 
+    public function isAdmin(): bool
+    {
+        return $this->hasRole('admin');
+    }
+
     /*
      |--------------------------------------------------------------------------
      | Relations methods
      |--------------------------------------------------------------------------
     */
-
-    /**** write here relations methods ****/
 }
