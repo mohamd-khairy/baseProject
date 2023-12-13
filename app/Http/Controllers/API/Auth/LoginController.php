@@ -27,7 +27,7 @@ class LoginController extends Controller
      */
     public function login(LoginRequest $request): JsonResponse
     {
-        if (env('USE_OTP', false)) {
+        if (config('app.use_otp', false)) {
             return $this->loginWithOtp($request);
         }
 

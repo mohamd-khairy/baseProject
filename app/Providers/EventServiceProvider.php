@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Channels\SmsChannel;
+use App\Events\ErrorAlertEvent;
 use App\Events\OTPLogin;
+use App\Listeners\ErrorAlertListener;
 use App\Listeners\OTPLoginListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -23,6 +25,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         OTPLogin::class => [
             OTPLoginListener::class
+        ],
+        ErrorAlertEvent::class => [
+            ErrorAlertListener::class
         ]
     ];
 

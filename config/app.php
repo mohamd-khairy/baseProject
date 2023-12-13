@@ -5,6 +5,13 @@ use Illuminate\Support\ServiceProvider;
 
 return [
 
+    //make it true if you want to active 2FA login in system
+    'use_otp' => env('USE_OTP', false),
+
+    //make it true if you want to notify admin with any exception in system
+    'mail_admin_exception' => env('MAIL_ADMIN_EXCEPTION', false),
+    'admin_email' => env('ADMIN_EMAIL', false),
+
     /*
     |--------------------------------------------------------------------------
     | Application Name
