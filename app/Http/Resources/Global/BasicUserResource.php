@@ -13,17 +13,16 @@ class BasicUserResource extends JsonResource
      * @param Request $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         return [
-            "id" => $this->id,
-            "name" => $this->name,
-            "avatar" => $this->avatar,
-            "phone" => $this->phone,
-            "email" => $this->email,
+            'id' => $this->id,
+            'name' => $this->name,
+            'avatar' => $this->avatar,
+            'phone' => $this->phone,
+            'email' => $this->email,
             'role_name' => $this->roles?->first()?->display_name ?? '---',
-            'civil_number' => $this->civil_number,
-            'department' => $this->department?->name ?? '---'
+            'created_at' => $this->created_at
         ];
     }
 }

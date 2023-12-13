@@ -2,6 +2,23 @@
 
 use Illuminate\Support\Str;
 
+if (!function_exists('handleException')) {
+    function handleException(Throwable $e): ?array
+    {
+        if (!config('app.mail_admin_exception', false)) {
+            return null;
+        }
+
+        return [
+            "name" => get_class($e),
+            "message" => $e->getMessage(),
+            "file" => $e->getFile(),
+            "line" => $e->getLine(),
+            "time" => now(),
+        ];
+    }
+}
+
 if (!function_exists('handleTransSnake')) {
     function handleTransSnake($trans = '', $return = null, $lang = null)
     {
@@ -69,6 +86,13 @@ if (!function_exists('timeFormat')) {
         }
 
         return Jenssegers\Date\Date::parse($time)->format('h:i a');
+    }
+}
+
+if (!function_exists('logError')) {
+    function logError($exception): void
+    {
+        info("Error In Line => " . $exception->getLigne() . " in File => {$exception->getFile()} , ErrorDetails => " . $exception->getMessage());
     }
 }
 

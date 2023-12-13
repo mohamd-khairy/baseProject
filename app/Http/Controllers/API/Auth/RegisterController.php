@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterRequest;
-use App\Http\Resources\Auth\UserResource;
+use App\Http\Resources\User\UserResource;
 use App\Models\User;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\JsonResponse;
@@ -13,16 +13,14 @@ class RegisterController extends Controller
 {
     use SendsPasswordResetEmails;
 
+    /**
+     * @param RegisterRequest $request
+     * @return JsonResponse
+     */
     public function register(RegisterRequest $request): JsonResponse
     {
-        /** create new user with verified data */
         $user = User::create($request->validated());
 
-        if ($user) {
-
-            return successResponse(new UserResource($user), 'User Created Successfully');
-        }
-
-        return failResponse('User Not created');
+        return successResponse(new UserResource($user), 'User Created Successfully');
     }
 }
