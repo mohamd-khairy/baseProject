@@ -13,7 +13,7 @@ class RoleService
     /**
      *  Define basic operations to be used for each model permissions.
      */
-    public const BASIC_ROLES = ['admin'];
+    public const BASIC_ROLES = ['super_admin'];
 
     /**
      *  Define basic operations to be used for each model permissions.
@@ -93,7 +93,7 @@ class RoleService
 
             $object = new $className();
 
-            if (is_object($object) && $object->inPermission !== false) {
+            if (is_object($object) &&  (bool)$object->inPermission !== false) {
                 return $class;
             }
 
@@ -113,6 +113,7 @@ class RoleService
     public static function createRole(array $role = [null], Collection $models = null): void
     {
         collect(array_filter(array_merge(self::BASIC_ROLES, $role)))->each(function ($item) use ($models) {
+
             // Retrieve the Arabic display name based on the role name
             $arabicDisplayName = handleTrans("roles.$item", lang: 'ar');
 
@@ -193,7 +194,7 @@ class RoleService
      */
     private static function prepareOperations(string $model_name): array
     {
-        $additional_operations = array_column(config('roles.additional_operations'), 'name');
+        $additional_operations = config('roles.additional_operations');
         $operations = self::BASIC_OPERATIONS;
         $object = false;
 
@@ -203,7 +204,7 @@ class RoleService
         } catch (Error $e) {
         }
 
-        if ($object && is_object($object) && $object->inPermission !== false) {
+        if ($object && is_object($object) && (bool)$object->inPermission !== false) {
 
             if (isset($object->basicOperations) && is_array($object->basicOperations)) {
                 $operations = $object->basicOperations;
