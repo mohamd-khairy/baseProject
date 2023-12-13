@@ -5,8 +5,9 @@ namespace App\Http\Controllers\API\User;
 use App\Filters\SearchFilters;
 use App\Filters\SortFilters;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\DataEntry\PageRequest;
 use App\Http\Requests\User\UserRequest;
+use App\Http\Resources\Global\PageRequest;
+use App\Http\Resources\User\UserResource;
 use App\Models\User;
 use App\Services\UploadService;
 use Illuminate\Http\JsonResponse;
@@ -30,18 +31,18 @@ class UserController extends Controller
      */
     public function index(PageRequest $request): JsonResponse
     {
-        $query = User::with(['roles', 'permissions', 'department'])
-            ->ignoreType('user')
+        $query = User::with('roles', 'permissions', 'department')
             ->excludeAdmins()
             ->excludeLoggedInUser();
 
         $data = app(Pipeline::class)->send($query)->through([
-            SearchFilters::class, SortFilters::class
+            SearchFilters::class,
+            SortFilters::class
         ])->thenReturn();
 
-        $data = request('pageSize') == -1
+        $data = ((int)$request->page === -1)
             ? $data->get()
-            : $data->paginate(request('pageSize', 15));
+            : $data->paginate(request('page', 15));
 
         return successResponse(['users' => $data]);
     }
@@ -56,7 +57,7 @@ class UserController extends Controller
 
             $user = User::create($request->validated());
 
-            $user->assignRole($request->roles ? resolveArray($request->roles) : ['employee']);
+            $user->assignRole(resolveArray($request->roles));
 
             return successResponse($user, 'User has been successfully created');
         });
@@ -70,7 +71,7 @@ class UserController extends Controller
     {
         $user->load('roles');
 
-        return successResponse($user);
+        return successResponse(new UserResource($user));
     }
 
     /**

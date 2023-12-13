@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\User;
 
-use App\Http\Resources\Global\JsonDataResource;
+use App\Http\Resources\Global\BasicResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\DB;
@@ -33,7 +33,7 @@ class UserResource extends JsonResource
             "department_id" => $this->department_id ?? null,
             "email_verified_at" => $this->email_verified_at ?? null,
             "status" => $this->status ?? null,
-            "roles" => JsonDataResource::collection($this->roles),
+            "roles" => BasicResource::collection($this->roles),
             'permissions' => $permissions ?? null,
         ];
     }

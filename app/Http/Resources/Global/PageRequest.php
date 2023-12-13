@@ -1,18 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Cause;
+namespace App\Http\Resources\Global;
 
-use App\Enums\Cause\CauseTypeEnum;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-/**
- * @property mixed name
- * @property mixed pages
- */
-class CauseSideRequest extends FormRequest
+class PageRequest extends FormRequest
 {
-    /**
+    /***
      * @return bool
      */
     public function authorize(): bool
@@ -20,13 +14,13 @@ class CauseSideRequest extends FormRequest
         return true;
     }
 
-    /**
-     * @return array
+    /***
+     * @return array<string, mixed>
      */
     public function rules(): array
     {
         return [
-
+            'page' => 'nullable|numeric|min:1',
         ];
     }
 }

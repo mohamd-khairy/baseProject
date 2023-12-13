@@ -72,3 +72,10 @@ if (!function_exists('timeFormat')) {
     }
 }
 
+if (!function_exists('logError')) {
+    function logError($exception): void
+    {
+        info("Error In Line => " . $exception->getLine() . " ErrorDetails => " . $exception->getMessage());
+    }
+}
+

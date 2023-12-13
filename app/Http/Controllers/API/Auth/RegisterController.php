@@ -13,16 +13,14 @@ class RegisterController extends Controller
 {
     use SendsPasswordResetEmails;
 
+    /**
+     * @param RegisterRequest $request
+     * @return JsonResponse
+     */
     public function register(RegisterRequest $request): JsonResponse
     {
-        /** create new user with verified data */
         $user = User::create($request->validated());
 
-        if ($user) {
-
-            return successResponse(new UserResource($user), 'User Created Successfully');
-        }
-
-        return failResponse('User Not created');
+        return successResponse(new UserResource($user), 'User Created Successfully');
     }
 }

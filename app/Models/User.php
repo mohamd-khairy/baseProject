@@ -56,6 +56,11 @@ class User extends Authenticatable implements MustVerifyEmail
         });
     }
 
+    public function scopeExcludeLoggedInUser(Builder $query): Builder
+    {
+        return $query->where('id', '!=', auth()->id());
+    }
+
     public function scopeExcludeAdmins(Builder $query): Builder
     {
         return $query->whereHas('roles', function ($q) {
