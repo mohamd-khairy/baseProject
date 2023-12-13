@@ -2,6 +2,8 @@
 
 namespace App\Exceptions;
 
+use App\Events\ErrorAlertEvent;
+use App\Jobs\JobDevNotification;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -26,15 +28,49 @@ class Handler extends ExceptionHandler
     public function register(): void
     {
         $this->reportable(function (Throwable $e) {
-            //
+
+            //send mail to admin with this exception
+            $this->reportAdmin($e);
         });
 
         $this->renderable(function (AuthenticationException $e, $request) {
+
+            //send mail to admin with this exception
+            $this->reportAdmin($e);
+
             return failResponse($e->getMessage(), 401);
         });
 
         $this->renderable(function (HttpException $e, $request) {
+
+            //send mail to admin with this exception
+            $this->reportAdmin($e);
+
             return failResponse($e->getMessage(), 400);
         });
+    }
+
+
+    protected function reportAdmin(Throwable $e)
+    {
+        if (!config('app.mail_admin_exception', false)) {
+            return;
+        }
+
+        // Create Notification Data
+        $exception = [
+            "name" => get_class($e),
+            "message" => $e->getMessage(),
+            "file" => $e->getFile(),
+            "line" => $e->getLine(),
+            "time" => now(),
+        ];
+
+        try {
+
+            event(new ErrorAlertEvent($exception));
+        } catch (\Throwable $th) {
+            //
+        }
     }
 }
