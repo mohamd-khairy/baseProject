@@ -26,15 +26,14 @@ class UserResource extends JsonResource
 
         return [
             "id" => $this->id,
-            "name" =>  $this->name ,
-            "avatar" => $this->avatar ,
-            "phone" => $this->phone ,
-            "email" => $this->email ,
-            "department_id" => $this->department_id ,
-            "email_verified_at" => $this->email_verified_at ,
-            "status" => $this->status ,
+            "name" =>  $this->name,
+            "avatar" => $this->avatar,
+            "phone" => $this->phone,
+            "email" => $this->email,
+            "email_verified_at" => $this->email_verified_at,
+            "status" => $this->status,
             "roles" => BasicResource::collection($this->roles),
-            'permissions' => $permissions ,
+            'permissions' => $permissions,
         ];
     }
 }

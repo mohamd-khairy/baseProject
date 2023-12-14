@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserRequest;
 use App\Http\Resources\Global\PageRequest;
 use App\Http\Resources\User\UserResource;
+use App\Http\Resources\UserCollection;
 use App\Models\User;
 use App\Services\UploadService;
 use Illuminate\Http\JsonResponse;
@@ -29,9 +30,9 @@ class UserController extends Controller
      * @param PageRequest $request
      * @return JsonResponse
      */
-    public function index(PageRequest $request): JsonResponse
+    public function index(PageRequest $request) //: JsonResponse
     {
-        $query = User::with('roles', 'permissions', 'department')
+        $query = User::with('roles', 'permissions')
             ->excludeAdmins()
             ->excludeLoggedInUser();
 
@@ -40,11 +41,12 @@ class UserController extends Controller
             SortFilters::class
         ])->thenReturn();
 
-        $data = ((int)$request->page === -1)
-            ? $data->get()
-            : $data->paginate(request('page', 15));
 
-        return successResponse(['users' => $data]);
+        $data = request('pageSize') == -1
+            ? getData(query: $data, method: 'get', resource: UserResource::class)
+            : getData(query: $data, method: 'paginate', resource: UserResource::class);
+
+        return successResponse($data);
     }
 
     /**

@@ -1,7 +1,35 @@
 <?php
 
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+
+if (!function_exists('getData')) {
+    function getData(Builder $query, string $method, $resource = null)
+    {
+        switch ($method) {
+            case 'first':
+                return $resource ? new $resource($query->$method()) : $query->$method();
+
+                break;
+            case 'get':
+                return $resource ? $resource::collection($query->$method()) : $query->$method();
+
+                break;
+            case 'paginate':
+                $paginated = $query->$method(request('pageSize', 15));
+
+                if ($resource) {
+
+                    $paginated->data = $resource::collection($paginated);
+                }
+
+                return $paginated;
+
+                break;
+        };
+    }
+}
 
 if (!function_exists('getModelKey')) {
     function getModelKey(string $className): string
@@ -46,4 +74,3 @@ if (!function_exists('resolvePhoto')) {
             : $result;
     }
 }
-

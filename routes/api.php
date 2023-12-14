@@ -29,6 +29,7 @@ Route::prefix('v1')->group(function () {
         | User Routes
         |--------------------------------------------------------------------------
        */
+        Route::apiResource('users', UserController::class);
         Route::get('user', [UserController::class, 'user']);
 
         /*

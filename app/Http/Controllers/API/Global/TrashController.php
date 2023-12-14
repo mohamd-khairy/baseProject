@@ -27,15 +27,13 @@ class TrashController extends Controller
     {
         $model = app(detectModelPath($type));
 
-        $query = $model->onlyTrashed();
-
-        $data = app(Pipeline::class)->send($query)->through([
+        $query = app(Pipeline::class)->send($model->onlyTrashed())->through([
             SortFilters::class
         ])->thenReturn();
 
-        $data = request('page') == -1
-            ? $data->get()
-            : $data->paginate(request('page', 15));
+        $data = request('pageSize') == -1
+            ? getData(query: $query, method: 'get')
+            : getData(query: $query, method: 'paginate');
 
         return successResponse(['trashed' => $data]);
     }

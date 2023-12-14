@@ -24,15 +24,13 @@ class ActivityController extends Controller
      */
     public function index(PageRequest $request): JsonResponse
     {
-        $query = Audit::with('auditable');
-
-        $data = app(Pipeline::class)->send($query)->through([
+        $query = app(Pipeline::class)->send(Audit::with('auditable'))->through([
             SortFilters::class
         ])->thenReturn();
 
-        $data = request('page') == -1
-            ? $data->get()
-            : $data->paginate(request('page', 15));
+        $data = request('pageSize') == -1
+            ? getData(query: $query, method: 'get')
+            : getData(query: $query, method: 'paginate');
 
         return successResponse(['activity' => $data]);
     }

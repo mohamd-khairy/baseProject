@@ -21,6 +21,7 @@ class PageRequest extends FormRequest
     {
         return [
             'page' => 'nullable|numeric|min:1',
+            'pageSize' => 'nullable|numeric',
         ];
     }
 }

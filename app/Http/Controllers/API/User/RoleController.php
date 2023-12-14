@@ -26,12 +26,15 @@ class RoleController extends Controller
      */
     public function index(): JsonResponse
     {
-        $roles = Role::with('permissions')
+        $query = Role::with('permissions')
             ->whereNotIn('id', auth()->user()->roles->pluck('id')->toArray())
-            ->latest()
-            ->get();
+            ->latest();
 
-        return successResponse(RoleResource::collection($roles));
+        $data = request('pageSize') == -1
+            ? getData(query: $query, method: 'get', resource: RoleResource::class)
+            : getData(query: $query, method: 'paginate', resource: RoleResource::class);
+
+        return successResponse($data);
     }
 
     /**

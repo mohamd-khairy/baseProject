@@ -12,7 +12,6 @@ class PermissionController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth']);
         $this->middleware('permission:read-permission', ['only' => ['index', 'permissions']]);
         $this->middleware('permission:create-permission', ['only' => ['store']]);
         $this->middleware('permission:update-permission', ['only' => ['update']]);
@@ -24,9 +23,13 @@ class PermissionController extends Controller
      */
     public function index(): JsonResponse
     {
-        $permissions = Permission::with('roles')->latest()->get();
+        $query = Permission::with('roles')->latest();
 
-        return successResponse($permissions);
+        $data = request('pageSize') == -1
+            ? getData(query: $query, method: 'get')
+            : getData(query: $query, method: 'paginate');
+
+        return successResponse($data);
     }
 
     /**
