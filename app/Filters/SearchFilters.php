@@ -13,6 +13,12 @@ class SearchFilters
      */
     public function handle($request, Closure $next)
     {
-        return $next($request)->where('name', 'like', '%' . request('search') . '%');
+        $query = $next($request);
+
+        if (request('search')) {
+            $query->search(request('search'));
+        }
+
+        return $query;
     }
 }

@@ -30,11 +30,11 @@ class UserController extends Controller
      * @param PageRequest $request
      * @return JsonResponse
      */
-    public function index(PageRequest $request) //: JsonResponse
+    public function index(PageRequest $request): JsonResponse
     {
-        $query = User::with('roles', 'permissions')
-            ->excludeAdmins()
-            ->excludeLoggedInUser();
+        $query = User::with('roles', 'permissions');
+            // ->excludeAdmins()
+            // ->excludeLoggedInUser();
 
         $data = app(Pipeline::class)->send($query)->through([
             SearchFilters::class,
@@ -90,7 +90,7 @@ class UserController extends Controller
                 $user->roles()->sync(resolveArray($request->roles));
             }
 
-            return successResponse($user, 'User has been successfully updated');
+            return successResponse($user->refresh(), 'User has been successfully updated');
         });
     }
 

@@ -5,5 +5,6 @@ return [
     'unauthorized' => 'ليس لديك صلاحيه',
     'roles' => [
         'admin' => 'مدير النظام',
+        'super_admin' => 'مدير الادارة',
     ]
 ];

@@ -18,7 +18,7 @@ class UserRolePermissionSeeder extends Seeder
         RoleService::handle();
 
         $roles = array_keys(config('roles.list'));
-        $roles[] = 'admin';
+        $roles[] = 'super_admin';
 
         foreach ($roles as $role) {
             $user = User::create([

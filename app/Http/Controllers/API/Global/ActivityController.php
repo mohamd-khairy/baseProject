@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\Global;
 
+use App\Filters\SearchFilters;
 use App\Filters\SortFilters;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Global\PageRequest;
@@ -25,6 +26,7 @@ class ActivityController extends Controller
     public function index(PageRequest $request): JsonResponse
     {
         $query = app(Pipeline::class)->send(Audit::with('auditable'))->through([
+            SearchFilters::class,
             SortFilters::class
         ])->thenReturn();
 

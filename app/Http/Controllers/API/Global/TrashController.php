@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\Global;
 
+use App\Filters\SearchFilters;
 use App\Filters\SortFilters;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Global\PageRequest;
@@ -28,6 +29,7 @@ class TrashController extends Controller
         $model = app(detectModelPath($type));
 
         $query = app(Pipeline::class)->send($model->onlyTrashed())->through([
+            SearchFilters::class,
             SortFilters::class
         ])->thenReturn();
 

@@ -5,5 +5,6 @@ return [
     'unauthorized' => 'Un Authorized',
     'roles' => [
         'admin' => 'System Administrator',
+        'super_admin' => 'Super Admin',
     ]
 ];

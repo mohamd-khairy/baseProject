@@ -28,15 +28,13 @@ class UserRequest extends FormRequest
         $id = $this->user?->id ?? '';
 
         return [
-            'civil_number' => 'nullable|integer|digits:10|unique:users,civil_number,' . $id,
-            'phone' => 'nullable|regex:/^[0-9]+$/|digits:10|unique:users,phone,' . $id,
-
-            'password' => 'nullable|min:8|confirmed',
             'name' => 'nullable|string',
-            'department_id' => 'sometimes|exists:departments,id',
             'email' => 'nullable|email|unique:users,email,' . $id,
-            'avatar' => 'nullable|string',
-            'status' => ['sometimes', 'required', Rule::in(...UserTypeEnum::getValues())]
+            'password' => 'nullable|min:8',
+            'phone' => 'nullable|regex:/^[0-9]+$/|digits:11|unique:users,phone,' . $id,
+            'avatar' => 'nullable|image',
+            'roles' => 'required_if:' . request()->method() . ',POST|array',
+            'roles.*' => 'required|exists:roles,name'
         ];
     }
 }
