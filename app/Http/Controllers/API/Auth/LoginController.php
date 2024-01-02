@@ -46,7 +46,7 @@ class LoginController extends Controller
             $user = Auth::user();
 
             if (!$user?->hasVerifiedEmail()) {
-                return failResponse('Your email address is not verified.');
+                return successResponse(['verify' => false], 'Your email address is not verified.', 400);
             }
 
             return successResponse([
@@ -71,7 +71,6 @@ class LoginController extends Controller
 
             $user = User::where('email', $userIdentifier)
                 ->orWhere('phone', $userIdentifier)->first();
-
         } catch (\Throwable $th) {
             $user = User::where('email', $userIdentifier)->first();
         }
@@ -138,6 +137,6 @@ class LoginController extends Controller
     {
         $request->user()->tokens()->delete();
 
-        return successResponse(message:'Logged out successfully');
+        return successResponse(message: 'Logged out successfully');
     }
 }
