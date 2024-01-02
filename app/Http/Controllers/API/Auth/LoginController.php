@@ -88,7 +88,7 @@ class LoginController extends Controller
             } catch (\Throwable $th) {
             }
 
-            return successResponse('OTP sent successfully');
+            return successResponse(['otp' => true], 'OTP sent successfully');
         }
 
         return failResponse('No User With this Data');
