@@ -60,7 +60,7 @@ class UploadService
      */
     public static function url(?string $path = null, string $disk = 'public'): ?string
     {
-        return $path && Storage::disk($disk)->exists($path) ? Storage::url($path) : null;
+        return $path && Storage::disk($disk)->exists($path) ? Storage::url($path) : $path;
     }
 
     /**

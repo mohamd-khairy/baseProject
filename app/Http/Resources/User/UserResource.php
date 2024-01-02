@@ -32,8 +32,10 @@ class UserResource extends JsonResource
             "email" => $this->email,
             "email_verified_at" => $this->email_verified_at,
             "status" => $this->status,
-            "roles" => BasicResource::collection($this->roles),
-            'permissions' => $permissions,
+            // "roles" => BasicResource::collection($this->roles),
+            // 'permissions' => $permissions,
+            'enc_rol' => base64_encode(json_encode(BasicResource::collection($this->roles))),
+            'enc_per' => base64_encode(json_encode($permissions)),
         ];
     }
 }
