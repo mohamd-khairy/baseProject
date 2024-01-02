@@ -7,7 +7,7 @@ if (!function_exists('successResponse')) {
     function successResponse($data = [], $message = 'success', $code = 200): JsonResponse
     {
         return response()->json([
-            'status' => true,
+            'status' => $code == 200 || $code == 201 ? true : false,
             'code' => $code,
             'message' => $message,
             'data' => $data,
